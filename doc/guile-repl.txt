@@ -19,6 +19,7 @@ TABLE OF CONTENTS                                        *guile-repl-contents*
     2. Setup ...................................... |guile-repl-setup|
     3. Running a REPL ............................. |guile-repl-running|
     4. Configuration .............................. |guile-repl-configuration|
+    5. Managing REPLs ............................. |guile-repl-management|
 
 
 ==============================================================================
@@ -51,6 +52,7 @@ command:
 <
 Inside the REPL the same commands are used as in Nvim's |terminal-emulator|. You
 can terminate the REPL the same way you terminate a regular Guile REPL.
+
 
 ==============================================================================
 CONFIGURATION                                       *guile-repl-configuration*
@@ -103,6 +105,36 @@ Default: 'Guile REPL'~
 
 The value used for the terminal buffer's `b:term_title` variable.
 
+
+==============================================================================
+REPL MANAGEMENT                                        *guile-repl-management*
+
+The plugin keeps  track of running REPL instances,  allowing you  to have more
+than one running at any time.  Instances form a type of  stack with newer ones
+on top, and they are identified by their job ID (see |job-control|).
+
+------------------------------------------------------------------------------
+g:guile_repl['instances']                          *g:guile_repl['instances']*
+
+A list of running Guile REPL instances ordered  by the time they were spawned,
+with younger ones to the begging of the list. See |b:guile_repl['instance']| for
+the format of the entries.
+
+Note  You should not mutate  this list yourself  unless you know  exactly what
+      you are doing. Terminated instances are removed automatically.
+
+------------------------------------------------------------------------------
+b:guile_repl['instance']                            *b:guile_repl['instance']*
+
+Every REPL instance  buffer is created  with this dictionary.  It contains the
+information about that particular instance and |g:guile_repl['instances']| has a
+reference to it. The entries are as follows:
+>
+   'binary': The binary name which was invoked
+   'buffer': Buffer number of the REPL
+   'args'  : REPL arguments as a list, contains default and user ones
+   'job_id': Job ID of the REPL process
+<
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:

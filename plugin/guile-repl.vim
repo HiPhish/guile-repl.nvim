@@ -40,6 +40,7 @@ let s:guile_repl = {
 	\ 'args'  : '-L .',
 	\ 'syntax': 'scheme',
 	\ 'title' : 'Guile REPL',
+	\ 'instances' : [],
 \ }
 
 
@@ -85,4 +86,33 @@ function! s:guile(mods, args)
 	silent execute 'terminal' l:binary l:args a:args
 	silent execute 'set syntax='.l:syntax
 	silent let b:term_title = l:title
+
+	" Collect information about this REPL instance
+	let b:guile_repl = {
+		\ 'instance': {
+			\ 'binary' : l:binary,
+			\ 'buffer' : bufnr('%'),
+			\ 'job_id': b:terminal_job_id,
+			\ 'args' : split(l:args, '\v\s') + split(a:args, '\v\s'),
+		\ }
+	\ }
+
+	" Add This instance to the top of the list of instances
+	call insert(g:guile_repl['instances'], b:guile_repl['instance'])
+
+	" Hook up autocommand to clean up after the REPL terminates; the
+	" autocommand is not guaranteed to have access to the b:guile_repl
+	" variable, that's why we instead use the literal job-id to identify this
+	" instance.
+	silent execute 'au BufDelete <buffer> call <SID>remove_instance('.b:guile_repl['instance']['job_id'].')'
+endfunction
+
+" Remove an instance from the global list of instances
+function! s:remove_instance(job_id)
+	for i in range(len(g:guile_repl['instances']))
+		if g:guile_repl['instances'][i]['job_id'] == a:job_id
+			call remove(g:guile_repl['instances'], i)
+			break
+		endif
+	endfor
 endfunction

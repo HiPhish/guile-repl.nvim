@@ -10,9 +10,20 @@ Execute (No arguments opens a default prompt):
   silent Guile
 
 Then (A terminal buffer with settings set):
-  AssertEqual &syntax, g:guile_repl['syntax']
-  AssertEqual b:term_title, g:guile_repl['title']
+  AssertEqual g:guile_repl['syntax'], &syntax
+  AssertEqual g:guile_repl['binary'], b:guile_repl['instance']['binary']
+  AssertEqual g:guile_repl['title'], b:term_title
+  AssertEqual split(g:guile_repl['args'], '\v\s'), b:guile_repl['instance']['args']
+  Assert exists('b:guile_repl')
+  AssertEqual b:guile_repl['instance'], g:guile_repl['instances'][0]
   quit
+
+
+Execute (User-supplied arguments):
+  silent Guile -foo -bar
+
+Then (Arugments are appended to defaults):
+  AssertEqual b:guile_repl['instance']['args'], split(g:guile_repl['args'], '\v\s') + ['-foo', '-bar']
 
 
 Execute (Tab-local settings override global ones):
@@ -24,5 +35,22 @@ Then (The title is different from the default):
   quit
 
 
-# TODO: Test that default arguments have been passed to Guile and that
-#       user-supplied arguments have been passed as well.
+Execute (One Instance is managed properly):
+  silent Guile
+
+Then:
+  AssertEqual 1, len(g:guile_repl['instances'])
+  quit
+  AssertEqual 0, len(g:guile_repl['instances'])
+
+
+Execute (More than one instance is managed correctly):
+  silent Guile
+  silent Guile
+
+Then (First two, then one, then no instance):
+  AssertEqual 2, len(g:guile_repl['instances'])
+  quit
+  AssertEqual 1, len(g:guile_repl['instances'])
+  quit
+  AssertEqual 0, len(g:guile_repl['instances'])
