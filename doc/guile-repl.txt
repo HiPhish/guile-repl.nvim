@@ -1,0 +1,109 @@
+*guile-repl.txt*                                                        {Nvim}
+
+                                                             *guile-repl.nvim*
+              ____       _ _            ____  _____ ____  _~
+             / ___|_   _(_) | ___      |  _ \| ____|  _ \| |~
+            | |  _| | | | | |/ _ \_____| |_) |  _| | |_) | |~
+            | |_| | |_| | | |  __/_____|  _ <| |___|  __/| |___~
+             \____|\__,_|_|_|\___|     |_| \_\_____|_|   |_____|~
+
+
+Author: Alejandro "HiPhish" Sanchez
+License: MIT License
+
+
+==============================================================================
+TABLE OF CONTENTS                                        *guile-repl-contents*
+
+    1. Introduction ............................... |guile-repl-introduction|
+    2. Setup ...................................... |guile-repl-setup|
+    3. Running a REPL ............................. |guile-repl-running|
+    4. Configuration .............................. |guile-repl-configuration|
+
+
+==============================================================================
+INTRODUCTION                                         *guile-repl-introduction*
+
+Guile-REPL.nvim  provides quick,  easy and customisable access  to a GNU Guile
+REPL by wrapping itself around Nvim's terminal emulator. This provides a quick
+and fully functional REPL from inside Nvim, but editing text is limited to the
+REPL's own interface.
+
+
+==============================================================================
+SETUP                                                       *guile-repl-setup*
+
+You need to  have GNU Guile  installed.  It does not  matter how or  where the
+binary is located,  you can change the setting,  but the default is to use the
+system's `guile` command.
+
+
+==============================================================================
+RUNNING                                                   *guile-repl-running*
+                                                                      *:Guile*
+
+To spawn  a new  REPL execute  the `:Guile` command.  You can  pass it  the same
+arguments as you can pass to the Guile binary. You can also use modifiers like
+`:vert`.  To run a file in a vertical split REPL you would execute the following
+command:
+>
+	:vert Guile -l my-file.scm
+<
+Inside the REPL the same commands are used as in Nvim's |terminal-emulator|. You
+can terminate the REPL the same way you terminate a regular Guile REPL.
+
+==============================================================================
+CONFIGURATION                                       *guile-repl-configuration*
+                                                                *g:guile_repl*
+                                                                *t:guile_repl*
+                                                                *w:guile_repl*
+                                                                *b:guile_repl*
+
+All settings are contained inside the `g:guile_repl` dictionary.  The key is the
+name of the setting and its value is the value. You can set individual entries
+according to your wishes;  if you wanted to disable syntax highlighting in the
+REPL you would add the following to your `init.vim`:
+>
+    let g:guile_repl= {'syntax': ''}
+<
+You do not have to add the default settings to your dictionary, this plugin is
+smart enough to not lose the defaults.
+
+Note  After Nvim has loaded up do not re-assign the `g:guile_repl` variable, set
+      its entries instead.
+
+It is also possible to specify local setting by using one of the scopes `t:`, `w:`
+or `b:`,  with later ones taking precedence.  The following is a  listing of the
+default settings.
+
+------------------------------------------------------------------------------
+g:guile_repl['binary']                                *g:guile_repl['binary']*
+Default: 'guile'~
+
+Which binary to execute for the REPL. The default uses the system binary.
+
+------------------------------------------------------------------------------
+g:guile_repl['args']                                    *g:guile_repl['args']*
+Default: '-L .'~
+
+Which arguments  to pass  to the executable,  these arguments  will be  passed
+before the user-supplied arguments.  The default adds the working directory to
+the load path
+
+------------------------------------------------------------------------------
+g:guile_repl['syntax']                                *g:guile_repl['syntax']*
+Default: 'scheme'~
+
+Which syntax  highlighting to use  for the REPL.  Use the empty  string if you
+wish to disable syntax highlighting.
+
+------------------------------------------------------------------------------
+g:guile_repl['title']                                  *g:guile_repl['title']*
+Default: 'Guile REPL'~
+
+The value used for the terminal buffer's `b:term_title` variable.
+
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
+

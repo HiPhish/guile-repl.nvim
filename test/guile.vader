@@ -1,0 +1,28 @@
+######################
+# The :Guile command #
+######################
+
+Before (Store old info binary so it can be restored):
+  let g:guile_repl['binary'] = 'sh test/mock-guile.sh'
+
+
+Execute (No arguments opens a default prompt):
+  silent Guile
+
+Then (A terminal buffer with settings set):
+  AssertEqual &syntax, g:guile_repl['syntax']
+  AssertEqual b:term_title, g:guile_repl['title']
+  quit
+
+
+Execute (Tab-local settings override global ones):
+  let t:guile_repl = {'title': 'Alternative title'}
+  silent Guile
+
+Then (The title is different from the default):
+  AssertEqual b:term_title, t:guile_repl['title']
+  quit
+
+
+# TODO: Test that default arguments have been passed to Guile and that
+#       user-supplied arguments have been passed as well.
