@@ -86,7 +86,7 @@ Which binary to execute for the REPL. The default uses the system binary.
 
 ------------------------------------------------------------------------------
 g:guile_repl['args']                                    *g:guile_repl['args']*
-Default: '-L .'~
+Default: ['-L', '.']~
 
 Which arguments  to pass  to the executable,  these arguments  will be  passed
 before the user-supplied arguments.  The default adds the working directory to

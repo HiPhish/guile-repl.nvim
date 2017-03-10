@@ -37,7 +37,7 @@ let g:loaded_guile_repl = 1
 " ----------------------------------------------------------------------------
 let s:guile_repl = {
 	\ 'binary': 'guile',
-	\ 'args'  : '-L .',
+	\ 'args'  : ['-L', '.'],
 	\ 'syntax': 'scheme',
 	\ 'title' : 'Guile REPL',
 	\ 'instances' : [],
@@ -59,11 +59,10 @@ endfor
 
 
 " The Guile command is the public interface for end users. The user can pass
-" any number of command-line arguments, they will be appended as one string
-" after the default arguments.
-command -nargs=? Guile call <SID>guile(<q-mods>, <q-args>)
+" any number of command-line arguments.
+command -nargs=* Guile call <SID>guile(<q-mods>, <f-args>)
 
-function! s:guile(mods, args)
+function! s:guile(mods, ...)
 	" The actual option values to use are determined at runtime. Global
 	" settings take precedence, so we loop over the global dictionary and
 	" create local variants of every setting.
@@ -82,8 +81,10 @@ function! s:guile(mods, args)
 		endfor
 	endfor
 
+	let l:args = l:args + a:000
+
 	silent execute a:mods 'new'
-	silent execute 'terminal' l:binary l:args a:args
+	silent execute 'terminal' l:binary join(l:args, ' ')
 	silent execute 'set syntax='.l:syntax
 	silent let b:term_title = l:title
 
@@ -91,9 +92,9 @@ function! s:guile(mods, args)
 	let b:guile_repl = {
 		\ 'instance': {
 			\ 'binary' : l:binary,
-			\ 'buffer' : bufnr('%'),
-			\ 'job_id': b:terminal_job_id,
-			\ 'args' : split(l:args, '\v\s') + split(a:args, '\v\s'),
+			\ 'args'   : l:args,
+			\ 'job_id' : b:terminal_job_id,
+			\ 'buffer' : bufnr('%')
 		\ }
 	\ }
 
@@ -116,3 +117,7 @@ function! s:remove_instance(job_id)
 		endif
 	endfor
 endfunction
+
+function s:SID()
+	return '<SNR>'.matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$').'_'
+endfun
