@@ -66,7 +66,7 @@ also bound to the same interface.  You cannot use Vim's  commands to edit text,
 you  instead have  to enter  terminal mode  (insert mode  for the  terminal) to
 modify text.
 
-Syntax highlighting uses  Vim's Scheme highlighting,  but this might now always
+Syntax highlighting uses  Vim's Scheme highlighting,  but this might not always
 be adequate.  Highlighting the  prompt or  the backtrace as  if it  was regular
 Scheme code is wrong.
 
