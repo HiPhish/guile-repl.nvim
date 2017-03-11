@@ -55,7 +55,7 @@ like:
 
 .. code-block:: vim
 
-   let g:guile_repl = {'binary': 'guile', 'args': '-L .', 'syntax': 'scheme'}
+   let g:guile_repl = {'binary': 'guile', 'args': ['-L', '.'], 'syntax': 'scheme'}
 
 
 Shortcomings
