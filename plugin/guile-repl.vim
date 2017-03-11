@@ -60,7 +60,7 @@ endfor
 
 " The Guile command is the public interface for end users. The user can pass
 " any number of command-line arguments.
-command! -bang -nargs=* Guile call <SID>guile(<q-mods>, '<bang>', <f-args>)
+command! -complete=file -bang -nargs=* Guile call <SID>guile(<q-mods>, '<bang>', <f-args>)
 
 function! s:guile(mods, bang, ...)
 	" The actual option values to use are determined at runtime. Global
