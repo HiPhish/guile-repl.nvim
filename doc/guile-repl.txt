@@ -41,7 +41,8 @@ system's `guile` command.
 
 ==============================================================================
 RUNNING                                                   *guile-repl-running*
-                                                                      *:Guile*
+
+:Guile [{arg} ...]                                                    *:Guile*
 
 To spawn  a new  REPL execute  the `:Guile` command.  You can  pass it  the same
 arguments as you can pass to the Guile binary. You can also use modifiers like
@@ -52,6 +53,12 @@ command:
 <
 Inside the REPL the same commands are used as in Nvim's |terminal-emulator|. You
 can terminate the REPL the same way you terminate a regular Guile REPL.
+
+------------------------------------------------------------------------------
+:Guile! [{arg} ...]                                                  *:Guile!*
+
+If there is  already one or more  instances running the  command will move the
+cursor to the REPL window. To explicitly spawn a new instance use `:Guile!`.
 
 
 ==============================================================================

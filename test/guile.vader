@@ -45,9 +45,28 @@ Then (The instance is kept track of):
   AssertEqual 0, len(g:guile_repl.instances)
 
 
+Execute (Try spawning two REPLs without bang):
+  silent Guile
+  silent Guile
+
+Then (There is only one instance):
+  AssertEqual 1, len(g:guile_repl.instances)
+  quit
+
+
+Execute (Try spawning two REPLs with bang):
+  silent Guile
+  silent Guile!
+
+Then (There are two instances):
+  AssertEqual 2, len(g:guile_repl.instances)
+  quit
+  quit
+
+
 Execute (More than one instance is spawned):
   silent Guile
-  silent Guile
+  silent Guile!
 
 Then (First two, then one, then no instance):
   AssertEqual 2, len(g:guile_repl.instances)
@@ -66,4 +85,3 @@ Execute (Pass arguments to the REPL):
 Then (Arguments have been split into a list):
   AssertEqual ['foo', 'bar', 'baz'], b:guile_repl.instance.args
   quit
-

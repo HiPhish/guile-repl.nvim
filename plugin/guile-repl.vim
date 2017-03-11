@@ -60,9 +60,9 @@ endfor
 
 " The Guile command is the public interface for end users. The user can pass
 " any number of command-line arguments.
-command -nargs=* Guile call <SID>guile(<q-mods>, <f-args>)
+command! -bang -nargs=* Guile call <SID>guile(<q-mods>, '<bang>', <f-args>)
 
-function! s:guile(mods, ...)
+function! s:guile(mods, bang, ...)
 	" The actual option values to use are determined at runtime. Global
 	" settings take precedence, so we loop over the global dictionary and
 	" create local variants of every setting.
@@ -82,6 +82,23 @@ function! s:guile(mods, ...)
 	endfor
 
 	let l:args = l:args + a:000
+
+	" If the ! was not supplied and there is already an instance running jump
+	" to that instance.
+	if empty(a:bang) && len(g:guile_repl.instances) > 0
+		" Always use the youngest instance
+		let l:buffer = g:guile_repl.instances[0].buffer
+		let l:windows = win_findbuf(l:buffer)
+
+		if empty(l:windows)
+			silent execute a:mods 'new'
+			silent execute 'buffer' l:buffer
+		else
+			call win_gotoid(l:windows[0])
+		endif
+
+		return
+	endif
 
 	silent execute a:mods 'new'
 	silent execute 'terminal' l:binary join(l:args, ' ')
