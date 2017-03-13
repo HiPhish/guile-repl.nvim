@@ -1,8 +1,8 @@
 .. default-role:: code
 
-#################################################
- Guile-REPL.nvim - The Poor Man's GNU Guile REPL
-#################################################
+###############################################
+ Guile-REPL.nvim - The GNU Guile REPL for Nvim
+###############################################
 
 Guile-REPL.nvim wraps around Nvim's built-in terminal emulator to create a REPL
 buffer for  GNU Guile.  While not  as perfect as  a native  REPL buffer,  it is
@@ -33,8 +33,8 @@ same arguments you can also use with your Guile binary. Example:
    " Add the current working directory to the load path
    :Guile -l my-file.scm
 
-   " Evaluate an expression and exit
-   :Guile -c '(display "Hello from Guile")'
+   " Evaluate an expression and exit (escape the space after 'display')
+   :Guile -c '(display\ "Hello from Guile")'
 
 By default the working  directory is added to the load path  by passing the `-L
 .` argument to the binary. See below for how to set the default arguments. The
@@ -47,15 +47,67 @@ By default the working  directory is added to the load path  by passing the `-L
 
 
 Configuration
+#############
+
+
+REPL settings
 =============
 
-All configuration is  held within  the `g:guile_repl` dictionary.  You can read
-the documentation  for details;  here is what  the default  configuration looks
-like:
+All REPL  configuration is held  within the `g:guile_repl` dictionary.  You can
+read  the documentation  for details;  here is  what the  default configuration
+looks like:
 
 .. code-block:: vim
 
    let g:guile_repl = {'binary': 'guile', 'args': ['-L', '.'], 'syntax': 'scheme'}
+
+To override  the defaults create a  new `g:guile_repl` in your  `init.vim` file
+containing *only* options you want to change.  Guile-REPL.nvim is  smart enough
+to fill in the rest.
+
+.. code-block:: vim
+
+   " Turn off syntax highlighting only
+   let g:guile_repl = {'syntax': ''}
+
+After Nvim  has loaded you  can the dictionary entries.  If you wanted  to turn
+syntax highlighting back on after starting up Nvim you would execute
+
+.. code-block:: vim
+
+   " Globally turn syntax highlighting back on
+   :let g:guile_repl['syntax'] = 'scheme'
+
+You can also specify settings local to the current tab/window/buffer by using a
+local dictionary:
+
+.. code-block:: vim
+
+   " Turn off syntax highlighting for this tab only
+   let t:guile_repl = {'syntax': ''}
+
+Local dictionaries can be created at any time.
+
+
+Key mappings
+============
+
+A new  operator is available  for sending text from  the current buffer  to the
+REPL. You will have to remap the keys for the new operator:
+
+.. code-block:: vim
+
+   " Send the text of a motion to the REPL
+   nmap <leader>rs  <Plug>(GuileReplSend)
+   " Send the current line to the REPL
+   nmap <leader>rss <Plug>(GuileReplSendLine)
+   nmap <leader>rs_ <Plug>(GuileReplSendLine)
+   " Send the selected text to the REPL
+   vmap <leader>rs  <Plug>(GuileReplSend)
+
+With  these mappings  you could  position your  cursor inside  an s-expression,
+press `<leader>rsa)`  and your expression would  be sent over to  the REPL with
+its parentheses.
 
 
 Shortcomings

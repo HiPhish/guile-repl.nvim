@@ -18,8 +18,9 @@ TABLE OF CONTENTS                                        *guile-repl-contents*
     1. Introduction ............................... |guile-repl-introduction|
     2. Setup ...................................... |guile-repl-setup|
     3. Running a REPL ............................. |guile-repl-running|
-    4. Configuration .............................. |guile-repl-configuration|
-    5. Managing REPLs ............................. |guile-repl-management|
+    4. Mappings ................................... |guile-repl-mappings|
+    5. Configuration .............................. |guile-repl-configuration|
+    6. Managing REPLs ............................. |guile-repl-management|
 
 
 ==============================================================================
@@ -59,6 +60,35 @@ can terminate the REPL the same way you terminate a regular Guile REPL.
 
 If there is  already one or more  instances running the  command will move the
 cursor to the REPL window. To explicitly spawn a new instance use `:Guile!`.
+
+
+==============================================================================
+MAPPINGS                                                 *guile-repl-mappings*
+
+While editing  a buffer the following  key mappings are available.  If no REPL
+instance is available  a new REPL will be spawned.  These mappings will switch
+the current window to the REPL. Example of use:
+>
+    nmap <leader>rs  <Plug>(GuileReplSend)
+    nmap <leader>rss <Plug>(GuileReplSendLine)
+    nmap <leader>rs_ <Plug>(GuileReplSendLine)
+
+    vmap <leader>rs  <Plug>(GuileReplSend)
+<
+You have to use `map` instead of  `noremap` and the line-wise action is defined in
+case you have `_` remapped somewhere else.
+
+------------------------------------------------------------------------------
+<Plug>(GuileReplSend){motion}                     *<Plug>(GuileReplSendSExpr)*
+{Visual}<Plug>(GuileReplSend)
+
+Send either the text {motion} moves over or the highlighted text to the REPL.
+
+------------------------------------------------------------------------------
+<Plug>(GuileReplSendLine)                          *<Plug>(GuileReplSendLine)*
+
+Send the current line to the REPL.  This is a convenience  for mapping for the
+sequence `<Plug>(GuileReplSendSExpr)_` in case you have remapped `_`.
 
 
 ==============================================================================
