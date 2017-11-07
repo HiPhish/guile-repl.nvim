@@ -4,6 +4,14 @@
  Guile-REPL.nvim - The GNU Guile REPL for Nvim
 ###############################################
 
+.. warning::
+
+   This plugin is deprecated in favour of REPL.nvim_, which does everything
+   Guile-REPL.nvim does, but in a more general way, and it supports any
+   programming language. This project should be considered abandoned.
+
+.. _REPL.NVIM: https://gitlab.com/HiPhish/repl.nvim/
+
 Guile-REPL.nvim wraps around Nvim's built-in terminal emulator to create a REPL
 buffer for  GNU Guile.  While not  as perfect as  a native  REPL buffer,  it is
 functional and gets the job done.
